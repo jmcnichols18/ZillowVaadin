@@ -71,13 +71,6 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
         </dependency>
-     
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>fop</artifactId>
-            <version>2.1</version>
-        </dependency>
-
         <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>Chart</artifactId>
