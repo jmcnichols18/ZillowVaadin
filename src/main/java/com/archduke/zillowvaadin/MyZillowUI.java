@@ -6,10 +6,12 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -35,18 +37,21 @@ public class MyZillowUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final TextField address = new TextField();
-        final TextField cityStateZip = new TextField();
-        address.setCaption("Enter your address here:");
-        cityStateZip.setCaption("Enter your City State and Zip here:");
-        cityStateZip.setRequired(true);
+        final TextField address = new TextField("Enter your Street Address here:",
+                "536 Empire Blvd");
+        final TextField cityStateZip = new TextField("Enter your City State and Zip here:", 
+                "Rochester, NY 14609");
+
+        address.setIcon(FontAwesome.HOME);
         address.setRequired(true);
+        cityStateZip.setRequired(true);
         address.addValidator(new RegexpValidator("^[0-9]+\\s[A-Za-z0-9'\\.\\-\\s\\,#]+"
                 , "Invalid Address entered."));
         cityStateZip.addValidator(new RegexpValidator("^[A-z\\s]+[,]?\\s[A-z]{2}[,]?\\s[0-9]{5}"
                 , "Invalid City State and Zip entered."));
 
-        Button button = new Button("Search Zillow");
+        Button button = new Button("Search Zillow", FontAwesome.SEARCH);
+        
         button.addClickListener((Button.ClickEvent e) -> {
             address.setValidationVisible(false);
             cityStateZip.setValidationVisible(false);
@@ -56,11 +61,12 @@ public class MyZillowUI extends UI {
                 zillowDataComponent = new ZillowSearchResultComponent(address.getValue(), cityStateZip.getValue());
                 layout.addComponent(zillowDataComponent);
             } catch (InvalidValueException ex) {
-                Notification.show(ex.getMessage());
+                Notification.show(ex.getMessage(), Type.ERROR_MESSAGE);
                 address.setValidationVisible(true);
                 cityStateZip.setValidationVisible(true);                  
             } catch (JAXBException | IOException ex) {
                 Logger.getLogger(MyZillowUI.class.getName()).log(Level.SEVERE, null, ex);
+                Notification.show(ex.getMessage(), Type.ERROR_MESSAGE);
             }
         });
 
@@ -71,8 +77,13 @@ public class MyZillowUI extends UI {
         setContent(layout);
     }
 
-    @WebServlet(urlPatterns = "/*", name = "MyZillowUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = MyZillowUI.class, productionMode = false, widgetset = "com.archduke.zillowSearchResult.AppWidgetSet")
+    /**
+     *
+     */
+    @WebServlet(urlPatterns = "/*", name = "MyZillowUIServlet", 
+             displayName = "MyZillowUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = MyZillowUI.class, productionMode = false, 
+            widgetset = "com.archduke.zillowSearchResult.AppWidgetSet")
     public static class MyZillowUIServlet extends VaadinServlet {
     }
 

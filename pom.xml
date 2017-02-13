@@ -71,11 +71,13 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>exporter</artifactId>
             <version>0.0.6</version>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -126,7 +128,11 @@
             <artifactId>SearchResults</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-treegrid</artifactId>
+            <version>0.7.2</version>
+        </dependency>
     </dependencies>
 
     <build>

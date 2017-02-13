@@ -31,4 +31,6 @@
 
 
     <inherits name="org.vaadin.addons.WidgetSet" />
+
+    <inherits name="org.vaadin.treegrid.WidgetSet" />
 </module>
