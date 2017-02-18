@@ -26,7 +26,10 @@ import org.vaadin.haijian.ExcelExporter;
 public class ZillowSearchResultComponent extends CustomComponent {
 
     private final Logger logger =  LoggerFactory.getLogger(this.getClass());
+     
     
+    private String address;
+    private String cityStateZip;
     /**
      *
      * @param address
@@ -35,9 +38,15 @@ public class ZillowSearchResultComponent extends CustomComponent {
      * @throws IOException
      */
     public ZillowSearchResultComponent(String address, String cityStateZip) 
-            throws JAXBException, IOException {
-        
-        ZillowDeepSearch searchResults;
+            throws JAXBException, IOException, NoMatchException {
+        this.address = address;
+        this.cityStateZip = cityStateZip;
+        initComponent();
+
+    }
+    
+    private void initComponent()throws JAXBException, IOException, NoMatchException{
+                ZillowDeepSearch searchResults;
         searchResults = new ZillowDeepSearch(address, cityStateZip);
         searchResults.setWidth(98, Sizeable.Unit.PERCENTAGE);
         

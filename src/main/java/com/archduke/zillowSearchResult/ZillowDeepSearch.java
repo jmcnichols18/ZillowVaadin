@@ -4,10 +4,14 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.external.org.slf4j.Logger;
 import com.vaadin.external.org.slf4j.LoggerFactory;
+
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
+
 import com.vaadin.ui.Table;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Collection;
+
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.netbeans.saas.RestResponse;
@@ -35,7 +39,7 @@ public class ZillowDeepSearch extends Table {
      * @throws JAXBException
      * @throws IOException
      */
-    public ZillowDeepSearch(String address, String cityStateZip) throws JAXBException, IOException {
+    public ZillowDeepSearch(String address, String cityStateZip) throws JAXBException, IOException, NoMatchException {
         super("Zillow DeepSearchResults Table");
         address = address.replace(" ", "+");
         cityStateZip = cityStateZip.replace(" ", "+").replace(",", "+");
@@ -43,24 +47,17 @@ public class ZillowDeepSearch extends Table {
 
         if (result.getDataAsObject(Searchresults.class) instanceof Searchresults) {
             Searchresults resultObj = result.getDataAsObject(Searchresults.class);
+            if (resultObj.getMessage().getCode().intValue() != 0) {
+                logger.error(resultObj.getMessage().getText());
+                throw new NoMatchException(resultObj.getMessage().getText());
+            }
             List<SearchResultsProperty> myResults = resultObj.getResponse().getResults().getResult();
             searchResults.addAll(myResults);
 
-//            this.addGeneratedColumn("Home Details",new ColumnGenerator(){
-//                @Override
-//                public Object generateCell(Table source, Object itemId, Object columnId) {
-//                    url = ()source.getItem("links")
-//                    return new Link("HomeDetails", new ExternalResource(url));;
-//                }
-//            
-//        });
             this.setContainerDataSource(searchResults);
             this.setPageLength(this.size());
             this.addStyleName("h-scrollable");
-            this.setColumnReorderingAllowed(true);
-            this.setColumnCollapsingAllowed(true);
 
-        
             this.setVisibleColumns(
                     "zestimate",
                     "taxAssessmentYear",
@@ -82,34 +79,24 @@ public class ZillowDeepSearch extends Table {
                     "address",
                     "localRealEstate" */
             );
-
         }
     }
 
     @Override
-    public Collection<?> getVisibleItemIds() {
-        logger.info("getVisibleItemIds : ");
-        super.getVisibleItemIds().forEach((v) -> {
-            logger.info("   : " + v.getClass());
-            logger.info("   : " + ((SearchResultsProperty) v).getZpid());
-        });
-        return super.getVisibleItemIds();
+    public boolean isColumnReorderingAllowed() {
+        return true;
     }
 
-    /**
-     *
-     * @return ordered list of column id objects
-     */
     @Override
-    public Object[] getVisibleColumns() {
-
-        for (Object col : super.getVisibleColumns()) {
-            logger.info("getVisibleColumns() : " + col.toString());
-        }
-        return super.getVisibleColumns();
-
+    public boolean isColumnCollapsingAllowed() {
+        return true;
     }
 
+    @Override
+    public Resource getColumnIcon(Object propertyId) {
+        return FontAwesome.LINK;
+    }
+   
     /**
      * @param rowId
      * @param colId
@@ -119,8 +106,8 @@ public class ZillowDeepSearch extends Table {
     @Override
     protected String formatPropertyValue(Object rowId, Object colId, Property<?> property) {
         String val = "";
-        logger.info("formatPropertyValue JDM " + property.getClass() + " "
-                + property.getType() + ":" + property.getValue());
+       // logger.info("formatPropertyValue JDM " + property.getClass() + " "
+       //         + property.getType() + ":" + property.getValue());
 
         if (property.getValue() != null) {
             SearchResultsProperty row = (SearchResultsProperty) rowId;
@@ -152,3 +139,5 @@ public class ZillowDeepSearch extends Table {
     }
 
 }
+
+
