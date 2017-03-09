@@ -33,4 +33,6 @@
     <inherits name="org.vaadin.addons.WidgetSet" />
 
     <inherits name="org.vaadin.treegrid.WidgetSet" />
+
+    <inherits name="com.vaadin.tapio.googlemaps.Widgetset" />
 </module>

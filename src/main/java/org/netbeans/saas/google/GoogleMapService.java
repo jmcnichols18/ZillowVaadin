@@ -27,7 +27,7 @@ public class GoogleMapService {
     static {
         try {
             Properties props = new Properties();
-            props.load(GoogleMapService.class.getResourceAsStream(PROP_FILE));
+            props.load(   GoogleMapService.class.getClassLoader().getResourceAsStream(PROP_FILE));
             apiKey = props.getProperty("api_key");
         } catch (IOException ex) {
             Logger.getLogger(GoogleMapService.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,7 +110,7 @@ public class GoogleMapService {
                 + "    }\n"
                 + "    function loadScript() {\n"
                 + "      var script = document.createElement(\"script\");\n"
-                + "      script.setAttribute(\"src\", \"http://maps.google.com/maps?file=api&v=2.x&key=" + key + "&async=2&callback=loadMap\");\n"
+                + "      script.setAttribute(\"src\", \"https://maps.google.com?file=api&v=3.x&key=" + key + "&async=2&callback=loadMap\");\n"
                 + "      script.setAttribute(\"type\", \"text/javascript\");\n"
                 + "      document.documentElement.firstChild.appendChild(script);\n"
                 + "    }\n"
@@ -121,7 +121,7 @@ public class GoogleMapService {
     
     public static class GeoCoder {
         
-        public final static String GEOCODE_URL = "http://maps.google.com/maps/geo";
+        public final static String GEOCODE_URL = "https://maps.google.com";
         private String location;
         private String key;
 

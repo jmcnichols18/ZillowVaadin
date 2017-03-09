@@ -5,10 +5,13 @@
  */
 package com.archduke.zillowSearchResult;
 
+import com.archduke.zillowvaadin.GoogleMapsUI;
 import com.vaadin.external.org.slf4j.LoggerFactory;
 import com.vaadin.external.org.slf4j.Logger;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Sizeable;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
@@ -72,6 +75,16 @@ public class ZillowSearchResultComponent extends CustomComponent {
         exportPanel.addComponent(pdfExporter);
         exportPanel.setSpacing(true);
         panelContent.addComponent(exportPanel);
+        
+        // Create an opener extension
+        BrowserWindowOpener opener =
+            new BrowserWindowOpener(GoogleMapsUI.class);
+        opener.setFeatures("height=400,width=600,resizable");
+
+        // Attach it to a button
+        Button mapsButton = new Button("Google Map!", FontAwesome.MAP);
+        opener.extend(mapsButton);
+        exportPanel.addComponent(mapsButton);
         
         panelContent.setMargin(true); // Very useful
         panelContent.setSpacing(true);

@@ -43,4 +43,19 @@ public class ZillowRealEstateService {
         sleep(1000);
         return conn.get(null);
     }
+
+    /**
+     *
+     * @param zpid
+     * @param count
+     * @return an instance of RestResponse
+     */
+    public static RestResponse getDeepComps(String zpid, String count) throws IOException {
+        String apiKey = ZillowRealEstateServiceAuthenticator.getApiKey();
+        String[][] pathParams = new String[][]{};
+        String[][] queryParams = new String[][]{{"zws-id", "" + apiKey + ""}, {"zpid", zpid}, {"count", count}};
+        RestConnection conn = new RestConnection("http://www.zillow.com/webservice/GetDeepComps.htm", pathParams, queryParams);
+        sleep(1000);
+        return conn.get(null);
+    }
 }
